@@ -1,0 +1,198 @@
+{
+  "name": "Delete emails simple flow",
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "delete",
+        "messageId": "={{ $json.id }}"
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        544,
+        192
+      ],
+      "id": "b60ecccd-7b93-4954-aa5b-52dd05292a7a",
+      "name": "Delete a message",
+      "webhookId": "76f2fde6-2b23-466d-ac94-be8dc9b608aa",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "MbxGoyHDvw5MOssp",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "limit": 100,
+        "filters": {
+          "labelIds": [
+            "CATEGORY_PROMOTIONS"
+          ],
+          "receivedBefore": "2025-05-01T00:00:00"
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        208,
+        192
+      ],
+      "id": "f78c1b73-49fb-4bbe-936c-494a03235ca4",
+      "name": "Promotion",
+      "webhookId": "a280f616-f467-4d98-a7b1-370fdb0fe92b",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "MbxGoyHDvw5MOssp",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 10
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -80,
+        192
+      ],
+      "id": "71f96eba-2c30-4944-a98d-eafb30591a4d",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "filters": {
+          "labelIds": [
+            "Label_1887954016005265386"
+          ],
+          "readStatus": "unread",
+          "receivedBefore": "2025-08-01T10:34:03"
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        208,
+        384
+      ],
+      "id": "2ff84032-13f8-403d-bcd0-b8c3a39e33fc",
+      "name": "AI Processed",
+      "webhookId": "a280f616-f467-4d98-a7b1-370fdb0fe92b",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "MbxGoyHDvw5MOssp",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "filters": {
+          "labelIds": [
+            "Label_1101782315863721210"
+          ],
+          "receivedBefore": "2025-08-10T10:34:58"
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "77a7fd04-eac7-4a64-89e8-28f89eb21f8c",
+      "name": "Bekvakningar",
+      "webhookId": "a280f616-f467-4d98-a7b1-370fdb0fe92b",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "MbxGoyHDvw5MOssp",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Delete a message": {
+      "main": [
+        []
+      ]
+    },
+    "Promotion": {
+      "main": [
+        [
+          {
+            "node": "Delete a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Promotion",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "AI Processed",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Bekvakningar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Processed": {
+      "main": [
+        [
+          {
+            "node": "Delete a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Bekvakningar": {
+      "main": [
+        [
+          {
+            "node": "Delete a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "051f0395-99fe-4b29-8680-7e58d8d28d75",
+  "meta": {
+    "instanceId": "d674783913aa6869df15a5f9c6d028857203d488da873960e2149e2a7942ad5b"
+  },
+  "id": "YxhhXWP24wl2Ux7a",
+  "tags": []
+}
